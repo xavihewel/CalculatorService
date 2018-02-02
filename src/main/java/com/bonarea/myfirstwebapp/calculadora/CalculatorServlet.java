@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.bonarea.calculatorservice.web;
+package com.bonarea.myfirstwebapp.calculadora;
 
-import com.bonarea.calculatorservice.service.ICalculatorService;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,15 +19,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author alumne
  */
-public class CalculatorServiceServlet extends HttpServlet {
+public class CalculatorServlet extends HttpServlet {
 
     @Inject
-    private ICalculatorService calculatorService;
-
-    private int num1;
-    private int num2;
-    private String operation;
-
+    @Any
+    Instance<Operation> operation;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,16 +37,26 @@ public class CalculatorServiceServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
+        String operationParam = request.getParameter("operation");
+        int num1 = Integer.parseInt(request.getParameter("num1"));
+        int num2 = Integer.parseInt(request.getParameter("num2"));
+        
+        final OperationNameLiteral calculatorNameLiteral = new OperationNameLiteral(operationParam);
+        final Operation operationSelected = operation.select(calculatorNameLiteral).get();
+        
+        int resultado = operationSelected.calculate(num1, num2);
+        
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CalculatorServiceServlet</title>");
+            out.println("<title>Servlet CalculatorServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CalculatorServiceServlet at " + request.getContextPath() + "</h1>");
-            out.println("<h1>operació: " + calculate() + "</h1>");
+            out.println("<h1>Servlet CalculatorServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>El resultado de la " + operationParam + " es : " + Integer.toString(resultado) + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -66,31 +74,7 @@ public class CalculatorServiceServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        this.num1 = Integer.parseInt(request.getParameter("num1"));
-        this.num2 = Integer.parseInt(request.getParameter("num2"));
-        this.operation = request.getParameter("operation");
         processRequest(request, response);
-    }
-
-    private String calculate() {
-        String resultText = "";
-        int result = 0;
-        switch (this.operation) {
-            case "add":
-                result = this.calculatorService.add(this.num1, this.num2);
-                break;
-            case "substract":
-                result = this.calculatorService.substract(this.num1, this.num2);
-                break;
-            case "multiply":
-                result = this.calculatorService.multiply(this.num1, this.num2);
-                break;
-            case "divide":
-                result = this.calculatorService.divide(this.num1, this.num2);
-                break;
-        }
-        resultText = String.valueOf(this.num1).concat(this.operation).concat(String.valueOf(this.num2)).concat("=").concat(String.valueOf(result));
-        return resultText;
     }
 
     /**

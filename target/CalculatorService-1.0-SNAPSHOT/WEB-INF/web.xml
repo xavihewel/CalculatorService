@@ -4,9 +4,41 @@
         <servlet-name>CalculatorServiceServlet</servlet-name>
         <servlet-class>com.bonarea.calculatorservice.web.CalculatorServiceServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CalculatorServlet</servlet-name>
+        <servlet-class>com.bonarea.myfirstwebapp.calculadora.CalculatorServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CustomerServlet</servlet-name>
+        <servlet-class>com.bonarea.myfirstwebapp.alternatives.CustomerServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BookServlet</servlet-name>
+        <servlet-class>com.bonarea.myfirstwebapp.interceptores.BookServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InformalNewServlet</servlet-name>
+        <servlet-class>com.bonarea.service.qualifiers.InformalNewServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CalculatorServiceServlet</servlet-name>
         <url-pattern>/CalculatorServiceServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CalculatorServlet</servlet-name>
+        <url-pattern>/CalculatorServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CustomerServlet</servlet-name>
+        <url-pattern>/CustomerServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookServlet</servlet-name>
+        <url-pattern>/BookServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InformalNewServlet</servlet-name>
+        <url-pattern>/InformalNewServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

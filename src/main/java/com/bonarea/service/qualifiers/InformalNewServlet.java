@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.bonarea.calculatorservice.web;
+package com.bonarea.service.qualifiers;
 
-import com.bonarea.calculatorservice.service.ICalculatorService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.inject.Inject;
@@ -16,17 +15,17 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author alumne
+ * @author Xavier Vergés Berga
  */
-public class CalculatorServiceServlet extends HttpServlet {
+public class InformalNewServlet extends HttpServlet {
 
     @Inject
-    private ICalculatorService calculatorService;
-
-    private int num1;
-    private int num2;
-    private String operation;
-
+    @Informal
+    private Message message;
+    
+    @Inject
+    private Message helloMessage;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -44,11 +43,14 @@ public class CalculatorServiceServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CalculatorServiceServlet</title>");
+            out.println("<title>Servlet InformalNewServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CalculatorServiceServlet at " + request.getContextPath() + "</h1>");
-            out.println("<h1>operació: " + calculate() + "</h1>");
+            out.println("<h1>Servlet InformalNewServlet at " + request.getContextPath() + "</h1>");
+            
+            out.println("<h1>" + message.get() + "</h1>");
+            out.println("<h1>" + helloMessage.get() + "</h1>");
+            
             out.println("</body>");
             out.println("</html>");
         }
@@ -66,31 +68,7 @@ public class CalculatorServiceServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        this.num1 = Integer.parseInt(request.getParameter("num1"));
-        this.num2 = Integer.parseInt(request.getParameter("num2"));
-        this.operation = request.getParameter("operation");
         processRequest(request, response);
-    }
-
-    private String calculate() {
-        String resultText = "";
-        int result = 0;
-        switch (this.operation) {
-            case "add":
-                result = this.calculatorService.add(this.num1, this.num2);
-                break;
-            case "substract":
-                result = this.calculatorService.substract(this.num1, this.num2);
-                break;
-            case "multiply":
-                result = this.calculatorService.multiply(this.num1, this.num2);
-                break;
-            case "divide":
-                result = this.calculatorService.divide(this.num1, this.num2);
-                break;
-        }
-        resultText = String.valueOf(this.num1).concat(this.operation).concat(String.valueOf(this.num2)).concat("=").concat(String.valueOf(result));
-        return resultText;
     }
 
     /**
